@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.dao.CategoryMapper">
+  <resultMap id="BaseResultMap" type="com.example.domain.Category">
+    <id column="category_id" jdbcType="TINYINT" property="categoryId" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="last_update" jdbcType="TIMESTAMP" property="lastUpdate" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Byte">
+    delete from category
+    where category_id = #{categoryId,jdbcType=TINYINT}
+  </delete>
+  <insert id="insert" parameterType="com.example.domain.Category">
+    insert into category (category_id, `name`, last_update
+      )
+    values (#{categoryId,jdbcType=TINYINT}, #{name,jdbcType=VARCHAR}, #{lastUpdate,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.example.domain.Category">
+    update category
+    set `name` = #{name,jdbcType=VARCHAR},
+      last_update = #{lastUpdate,jdbcType=TIMESTAMP}
+    where category_id = #{categoryId,jdbcType=TINYINT}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Byte" resultMap="BaseResultMap">
+    select category_id, `name`, last_update
+    from category
+    where category_id = #{categoryId,jdbcType=TINYINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select category_id, `name`, last_update
+    from category
+  </select>
+</mapper>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.dao.CountryMapper">
+    <resultMap id="BaseResultMap" type="com.example.domain.Country">
+        <id column="country_id" jdbcType="SMALLINT" property="countryId"/>
+        <result column="country" jdbcType="VARCHAR" property="country"/>
+        <result column="last_update" jdbcType="TIMESTAMP" property="lastUpdate"/>
+    </resultMap>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Short">
+    delete from country
+    where country_id = #{countryId,jdbcType=SMALLINT}
+  </delete>
+    <insert id="insert" parameterType="com.example.domain.Country">
+    insert into country (country_id, country, last_update
+      )
+    values (#{countryId,jdbcType=SMALLINT}, #{country,jdbcType=VARCHAR}, #{lastUpdate,jdbcType=TIMESTAMP}
+      )
+  </insert>
+    <update id="updateByPrimaryKey" parameterType="com.example.domain.Country">
+    update country
+    set country = #{country,jdbcType=VARCHAR},
+      last_update = #{lastUpdate,jdbcType=TIMESTAMP}
+    where country_id = #{countryId,jdbcType=SMALLINT}
+  </update>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Short" resultMap="BaseResultMap">
+    select country_id, country, last_update
+    from country
+    where country_id = #{countryId,jdbcType=SMALLINT}
+  </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+    select country_id, country, last_update
+    from country
+  </select>
+
+    <select id="selectTotalPage"
+            parameterType="com.example.domain.Country"
+            resultType="java.lang.Integer">
+        select count(country_id) as totalPage from country
+        <where>
+            <if test="countryId !=null ">
+                AND country_id =#{countryId}
+            </if>
+            <if test="country !=null and country!='' ">
+                AND country LIKE CONCAT('%',#{country},'%')
+            </if>
+        </where>
+    </select>
+    <select id="selectByCondition"
+            resultMap="BaseResultMap">
+        select country_id, country, last_update
+        from country
+        <where>
+            <if test="countryId !=null ">
+                AND country_id =#{countryId}
+            </if>
+            <if test="country !=null and country!='' ">
+                AND country LIKE CONCAT('%',#{country},'%')
+            </if>
+        </where>
+        order by last_update desc
+    </select>
+</mapper>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.dao.SalesByFilmCategoryMapper">
+  <resultMap id="BaseResultMap" type="com.example.domain.SalesByFilmCategory">
+    <result column="category" jdbcType="VARCHAR" property="category" />
+    <result column="total_sales" jdbcType="DECIMAL" property="totalSales" />
+  </resultMap>
+  <insert id="insert" parameterType="com.example.domain.SalesByFilmCategory">
+    insert into sales_by_film_category (category, total_sales)
+    values (#{category,jdbcType=VARCHAR}, #{totalSales,jdbcType=DECIMAL})
+  </insert>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select category, total_sales
+    from sales_by_film_category
+  </select>
+</mapper>

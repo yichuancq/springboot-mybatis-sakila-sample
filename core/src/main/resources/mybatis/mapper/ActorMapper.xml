@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.dao.ActorMapper">
+  <resultMap id="BaseResultMap" type="com.example.domain.Actor">
+    <id column="actor_id" jdbcType="SMALLINT" property="actorId" />
+    <result column="first_name" jdbcType="VARCHAR" property="firstName" />
+    <result column="last_name" jdbcType="VARCHAR" property="lastName" />
+    <result column="last_update" jdbcType="TIMESTAMP" property="lastUpdate" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Short">
+    delete from actor
+    where actor_id = #{actorId,jdbcType=SMALLINT}
+  </delete>
+  <insert id="insert" parameterType="com.example.domain.Actor">
+    insert into actor (actor_id, first_name, last_name, 
+      last_update)
+    values (#{actorId,jdbcType=SMALLINT}, #{firstName,jdbcType=VARCHAR}, #{lastName,jdbcType=VARCHAR}, 
+      #{lastUpdate,jdbcType=TIMESTAMP})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.example.domain.Actor">
+    update actor
+    set first_name = #{firstName,jdbcType=VARCHAR},
+      last_name = #{lastName,jdbcType=VARCHAR},
+      last_update = #{lastUpdate,jdbcType=TIMESTAMP}
+    where actor_id = #{actorId,jdbcType=SMALLINT}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Short" resultMap="BaseResultMap">
+    select actor_id, first_name, last_name, last_update
+    from actor
+    where actor_id = #{actorId,jdbcType=SMALLINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select actor_id, first_name, last_name, last_update
+    from actor
+  </select>
+</mapper>

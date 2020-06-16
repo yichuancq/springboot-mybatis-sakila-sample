@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.dao.CityMapper">
+    <resultMap id="BaseResultMap" type="com.example.domain.City">
+        <id column="city_id" jdbcType="SMALLINT" property="cityId"/>
+        <result column="city" jdbcType="VARCHAR" property="city"/>
+        <result column="country_id" jdbcType="SMALLINT" property="countryId"/>
+        <result column="last_update" jdbcType="TIMESTAMP" property="lastUpdate"/>
+    </resultMap>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Short">
+    delete from city
+    where city_id = #{cityId,jdbcType=SMALLINT}
+  </delete>
+
+    <insert id="insert" parameterType="com.example.domain.City">
+    insert into city (city_id, city, country_id, 
+      last_update)
+    values (#{cityId,jdbcType=SMALLINT}, #{city,jdbcType=VARCHAR}, #{countryId,jdbcType=SMALLINT}, 
+      #{lastUpdate,jdbcType=TIMESTAMP})
+  </insert>
+
+
+    <update id="updateByPrimaryKey" parameterType="com.example.domain.City">
+    update city
+    set city = #{city,jdbcType=VARCHAR},
+      country_id = #{countryId,jdbcType=SMALLINT},
+      last_update = #{lastUpdate,jdbcType=TIMESTAMP}
+    where city_id = #{cityId,jdbcType=SMALLINT}
+  </update>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Short" resultMap="BaseResultMap">
+    select city_id, city, country_id, last_update
+    from city
+    where city_id = #{cityId,jdbcType=SMALLINT}
+  </select>
+
+    <select id="selectAll" resultMap="BaseResultMap">
+    select city_id, city, country_id, last_update
+    from city
+  </select>
+    <select id="selectTotalPage"
+            parameterType="com.example.domain.City"
+            resultType="java.lang.Integer">
+
+        select count(city_id) as totalPage from city
+        <where>
+            <if test="cityId !=null ">
+                AND city_id =#{cityId}
+            </if>
+            <if test="city !=null and city!='' ">
+                AND city LIKE CONCAT('%',#{city},'%')
+            </if>
+            <if test="countryId !=null ">
+                AND country_id =#{countryId}
+            </if>
+        </where>
+
+
+    </select>
+
+
+    <select id="selectByCondition" parameterType="com.example.domain.City"
+            resultMap="BaseResultMap">
+        select city_id, city, country_id, last_update
+        from city
+        <where>
+            <if test="cityId !=null ">
+                AND city_id =#{cityId}
+            </if>
+            <if test="city !=null and city!='' ">
+                AND city LIKE CONCAT('%',#{city},'%')
+            </if>
+            <if test="countryId !=null ">
+                AND country_id =#{countryId}
+            </if>
+        </where>
+        order by last_update desc
+    </select>
+</mapper>

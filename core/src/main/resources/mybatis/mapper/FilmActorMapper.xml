@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.dao.FilmActorMapper">
+  <resultMap id="BaseResultMap" type="com.example.domain.FilmActor">
+    <id column="actor_id" jdbcType="SMALLINT" property="actorId" />
+    <id column="film_id" jdbcType="SMALLINT" property="filmId" />
+    <result column="last_update" jdbcType="TIMESTAMP" property="lastUpdate" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="map">
+    delete from film_actor
+    where actor_id = #{actorId,jdbcType=SMALLINT}
+      and film_id = #{filmId,jdbcType=SMALLINT}
+  </delete>
+  <insert id="insert" parameterType="com.example.domain.FilmActor">
+    insert into film_actor (actor_id, film_id, last_update
+      )
+    values (#{actorId,jdbcType=SMALLINT}, #{filmId,jdbcType=SMALLINT}, #{lastUpdate,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.example.domain.FilmActor">
+    update film_actor
+    set last_update = #{lastUpdate,jdbcType=TIMESTAMP}
+    where actor_id = #{actorId,jdbcType=SMALLINT}
+      and film_id = #{filmId,jdbcType=SMALLINT}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="map" resultMap="BaseResultMap">
+    select actor_id, film_id, last_update
+    from film_actor
+    where actor_id = #{actorId,jdbcType=SMALLINT}
+      and film_id = #{filmId,jdbcType=SMALLINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select actor_id, film_id, last_update
+    from film_actor
+  </select>
+</mapper>

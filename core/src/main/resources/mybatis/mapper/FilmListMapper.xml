@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.dao.FilmListMapper">
+    <resultMap id="BaseResultMap" type="com.example.domain.FilmList">
+        <result column="FID" jdbcType="SMALLINT" property="fid"/>
+        <result column="title" jdbcType="VARCHAR" property="title"/>
+        <result column="category" jdbcType="VARCHAR" property="category"/>
+        <result column="price" jdbcType="DECIMAL" property="price"/>
+        <result column="length" jdbcType="SMALLINT" property="length"/>
+        <result column="rating" jdbcType="CHAR" property="rating"/>
+        <result column="description" jdbcType="LONGVARCHAR" property="description"/>
+        <result column="actors" jdbcType="LONGVARCHAR" property="actors"/>
+    </resultMap>
+    <insert id="insert" parameterType="com.example.domain.FilmList">
+            insert into film_list (FID, title, category,
+              price, `length`, rating,
+              description, actors)
+            values (#{fid,jdbcType=SMALLINT}, #{title,jdbcType=VARCHAR}, #{category,jdbcType=VARCHAR},
+              #{price,jdbcType=DECIMAL}, #{length,jdbcType=SMALLINT}, #{rating,jdbcType=CHAR},
+              #{description,jdbcType=LONGVARCHAR}, #{actors,jdbcType=LONGVARCHAR})
+      </insert>
+    <select id="selectAll" resultMap="BaseResultMap">
+        select FID, title, category, price, `length`, rating, description, actors
+        from film_list
+      </select>
+
+    <!--动态条件查询-->
+    <select id="selectByCondition"
+            parameterType="com.example.domain.FilmList"
+            resultType="com.example.domain.FilmList">
+        SELECT FID, title, category, price, `length`, rating, description, actors
+        FROM film_list
+        <where>
+            <if test="title !=null and title!='' ">
+                AND title LIKE CONCAT('%',#{title},'%')
+            </if>
+            <if test="category !=null and category!='' ">
+                AND category LIKE CONCAT('%',#{category},'%')
+            </if>
+            <if test="rating !=null and rating!='' ">
+                AND rating LIKE CONCAT('%',#{rating},'%')
+            </if>
+            <if test="description !=null and description!='' ">
+                AND description LIKE CONCAT('%',#{description},'%')
+            </if>
+            <if test="actors !=null and actors!='' ">
+                AND actors LIKE CONCAT('%',#{actors},'%')
+            </if>
+        </where>
+    </select>
+
+    <!--获取总页码数-->
+    <select id="totalPage"
+            parameterType="com.example.domain.FilmList"
+            resultType="java.lang.Integer">
+        SELECT COUNT(FID) as totalCount
+        FROM film_list
+        <where>
+            <if test="title !=null and title!='' ">
+                AND title LIKE CONCAT('%',#{title},'%')
+            </if>
+            <if test="category !=null and category!='' ">
+                AND category LIKE CONCAT('%',#{category},'%')
+            </if>
+            <if test="rating !=null and rating!='' ">
+                AND rating LIKE CONCAT('%',#{rating},'%')
+            </if>
+            <if test="description !=null and description!='' ">
+                AND description LIKE CONCAT('%',#{description},'%')
+            </if>
+            <if test="actors !=null and actors!='' ">
+                AND actors LIKE CONCAT('%',#{actors},'%')
+            </if>
+        </where>
+
+
+    </select>
+</mapper>

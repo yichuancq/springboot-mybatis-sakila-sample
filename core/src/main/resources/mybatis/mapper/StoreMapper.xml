@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.dao.StoreMapper">
+  <resultMap id="BaseResultMap" type="com.example.domain.Store">
+    <id column="store_id" jdbcType="TINYINT" property="storeId" />
+    <result column="manager_staff_id" jdbcType="TINYINT" property="managerStaffId" />
+    <result column="address_id" jdbcType="SMALLINT" property="addressId" />
+    <result column="last_update" jdbcType="TIMESTAMP" property="lastUpdate" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Byte">
+    delete from store
+    where store_id = #{storeId,jdbcType=TINYINT}
+  </delete>
+  <insert id="insert" parameterType="com.example.domain.Store">
+    insert into store (store_id, manager_staff_id, address_id, 
+      last_update)
+    values (#{storeId,jdbcType=TINYINT}, #{managerStaffId,jdbcType=TINYINT}, #{addressId,jdbcType=SMALLINT}, 
+      #{lastUpdate,jdbcType=TIMESTAMP})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.example.domain.Store">
+    update store
+    set manager_staff_id = #{managerStaffId,jdbcType=TINYINT},
+      address_id = #{addressId,jdbcType=SMALLINT},
+      last_update = #{lastUpdate,jdbcType=TIMESTAMP}
+    where store_id = #{storeId,jdbcType=TINYINT}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Byte" resultMap="BaseResultMap">
+    select store_id, manager_staff_id, address_id, last_update
+    from store
+    where store_id = #{storeId,jdbcType=TINYINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select store_id, manager_staff_id, address_id, last_update
+    from store
+  </select>
+</mapper>

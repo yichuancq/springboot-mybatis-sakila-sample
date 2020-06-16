@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.dao.FilmMapper">
+  <resultMap id="BaseResultMap" type="com.example.domain.Film">
+    <id column="film_id" jdbcType="SMALLINT" property="filmId" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="release_year" jdbcType="DATE" property="releaseYear" />
+    <result column="language_id" jdbcType="TINYINT" property="languageId" />
+    <result column="original_language_id" jdbcType="TINYINT" property="originalLanguageId" />
+    <result column="rental_duration" jdbcType="TINYINT" property="rentalDuration" />
+    <result column="rental_rate" jdbcType="DECIMAL" property="rentalRate" />
+    <result column="length" jdbcType="SMALLINT" property="length" />
+    <result column="replacement_cost" jdbcType="DECIMAL" property="replacementCost" />
+    <result column="rating" jdbcType="CHAR" property="rating" />
+    <result column="special_features" jdbcType="CHAR" property="specialFeatures" />
+    <result column="last_update" jdbcType="TIMESTAMP" property="lastUpdate" />
+    <result column="description" jdbcType="LONGVARCHAR" property="description" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Short">
+    delete from film
+    where film_id = #{filmId,jdbcType=SMALLINT}
+  </delete>
+  <insert id="insert" parameterType="com.example.domain.Film">
+    insert into film (film_id, title, release_year, 
+      language_id, original_language_id, rental_duration, 
+      rental_rate, `length`, replacement_cost, 
+      rating, special_features, last_update, 
+      description)
+    values (#{filmId,jdbcType=SMALLINT}, #{title,jdbcType=VARCHAR}, #{releaseYear,jdbcType=DATE}, 
+      #{languageId,jdbcType=TINYINT}, #{originalLanguageId,jdbcType=TINYINT}, #{rentalDuration,jdbcType=TINYINT}, 
+      #{rentalRate,jdbcType=DECIMAL}, #{length,jdbcType=SMALLINT}, #{replacementCost,jdbcType=DECIMAL}, 
+      #{rating,jdbcType=CHAR}, #{specialFeatures,jdbcType=CHAR}, #{lastUpdate,jdbcType=TIMESTAMP}, 
+      #{description,jdbcType=LONGVARCHAR})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.example.domain.Film">
+    update film
+    set title = #{title,jdbcType=VARCHAR},
+      release_year = #{releaseYear,jdbcType=DATE},
+      language_id = #{languageId,jdbcType=TINYINT},
+      original_language_id = #{originalLanguageId,jdbcType=TINYINT},
+      rental_duration = #{rentalDuration,jdbcType=TINYINT},
+      rental_rate = #{rentalRate,jdbcType=DECIMAL},
+      `length` = #{length,jdbcType=SMALLINT},
+      replacement_cost = #{replacementCost,jdbcType=DECIMAL},
+      rating = #{rating,jdbcType=CHAR},
+      special_features = #{specialFeatures,jdbcType=CHAR},
+      last_update = #{lastUpdate,jdbcType=TIMESTAMP},
+      description = #{description,jdbcType=LONGVARCHAR}
+    where film_id = #{filmId,jdbcType=SMALLINT}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Short" resultMap="BaseResultMap">
+    select film_id, title, release_year, language_id, original_language_id, rental_duration, 
+    rental_rate, `length`, replacement_cost, rating, special_features, last_update, description
+    from film
+    where film_id = #{filmId,jdbcType=SMALLINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select film_id, title, release_year, language_id, original_language_id, rental_duration, 
+    rental_rate, `length`, replacement_cost, rating, special_features, last_update, description
+    from film
+  </select>
+</mapper>

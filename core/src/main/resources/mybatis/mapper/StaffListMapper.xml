@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.dao.StaffListMapper">
+
+    <resultMap id="BaseResultMap" type="com.example.domain.StaffList">
+        <result column="ID" jdbcType="TINYINT" property="id"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="address" jdbcType="VARCHAR" property="address"/>
+        <result column="zip code" jdbcType="VARCHAR" property="zipCode"/>
+        <result column="phone" jdbcType="VARCHAR" property="phone"/>
+        <result column="city" jdbcType="VARCHAR" property="city"/>
+        <result column="country" jdbcType="VARCHAR" property="country"/>
+        <result column="SID" jdbcType="TINYINT" property="sid"/>
+    </resultMap>
+
+    <!-- staffVO-->
+    <resultMap id="BaseResultMapStaffVO" type="com.example.vo.staff.StaffVO">
+        <result column="staff_id" jdbcType="TINYINT" property="staffId"/>
+        <result column="first_name" jdbcType="VARCHAR" property="firstName"/>
+        <result column="last_name" jdbcType="VARCHAR" property="lastName"/>
+        <result column="email" jdbcType="VARCHAR" property="email"/>
+        <result column="active" jdbcType="TINYINT" property="active"/>
+        <result column="address_id" jdbcType="TINYINT" property="addressId"/>
+        <result column="address" jdbcType="VARCHAR" property="address"/>
+        <result column="postal_code" jdbcType="VARCHAR" property="postalCode"/>
+        <result column="district" jdbcType="VARCHAR" property="district"/>
+        <result column="phone" jdbcType="VARCHAR" property="phone"/>
+        <result column="city_id" jdbcType="TINYINT" property="cityId"/>
+        <result column="city" jdbcType="VARCHAR" property="city"/>
+        <result column="country_id" jdbcType="TINYINT" property="countryId"/>
+        <result column="country" jdbcType="VARCHAR" property="country"/>
+        <result column="picture" jdbcType="LONGVARBINARY" property="picture"/>
+        <result column="last_update" jdbcType="TIMESTAMP" property="lastUpdate"/>
+    </resultMap>
+
+    <insert id="insert" parameterType="com.example.domain.StaffList">
+    insert into staff_list (ID, `name`, address,
+      `zip code`, phone, city,
+      country, SID)
+    values (#{id,jdbcType=TINYINT}, #{name,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR},
+      #{zipCode,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR},
+      #{country,jdbcType=VARCHAR}, #{sid,jdbcType=TINYINT})
+  </insert>
+    <select id="selectAll" resultMap="BaseResultMap">
+    select ID, `name`, address, `zip code`, phone, city, country, SID
+    from staff_list
+  </select>
+
+    <!--动态条件查询-->
+    <select id="selectByConditions" resultType="com.example.domain.StaffList">
+        SELECT ID, `name`, address, `zip code`, phone, city, country, SID
+        FROM staff_list
+        <where>
+            <if test="name !=null and name!='' ">
+                AND name LIKE CONCAT('%',#{name},'%')
+            </if>
+            <if test="address !=null and address!='' ">
+                AND address LIKE CONCAT('%',#{address},'%')
+            </if>
+            <if test="phone !=null and phone!='' ">
+                AND phone LIKE CONCAT('%',#{phone},'%')
+            </if>
+            <if test="city !=null and city!='' ">
+                AND city LIKE CONCAT('%',#{city},'%')
+            </if>
+            <if test="country !=null and country!='' ">
+                AND country LIKE CONCAT('%',#{country},'%')
+            </if>
+        </where>
+
+    </select>
+
+    <!--获取总页码数-->
+    <select id="selectTotalPage" resultType="java.lang.Integer">
+
+        SELECT COUNT(SID) as totalCount
+        FROM staff_list
+        <where>
+            <if test="name !=null and name!='' ">
+                AND name LIKE CONCAT('%',#{name},'%')
+            </if>
+            <if test="address !=null and address!='' ">
+                AND address LIKE CONCAT('%',#{address},'%')
+            </if>
+            <if test="phone !=null and phone!='' ">
+                AND phone LIKE CONCAT('%',#{phone},'%')
+            </if>
+            <if test="city !=null and city!='' ">
+                AND city LIKE CONCAT('%',#{city},'%')
+            </if>
+            <if test="country !=null and country!='' ">
+                AND country LIKE CONCAT('%',#{country},'%')
+            </if>
+        </where>
+    </select>
+
+    <select id="selectTotalPageStaffVO"
+            parameterType="com.example.vo.staff.StaffVO"
+            resultType="java.lang.Integer">
+        SELECT
+        count( staff.staff_id ) AS totalCount
+        FROM
+        staff
+        LEFT JOIN address ON staff.address_id = address.address_id
+        LEFT JOIN city ON address.city_id = city.city_id
+        LEFT JOIN country ON city.country_id = country.country_id
+        <where>
+            <if test="firstName !=null and firstName!='' ">
+                AND first_name LIKE CONCAT('%',#{firstName},'%')
+            </if>
+            <if test="lastName !=null and lastName!='' ">
+                AND last_name LIKE CONCAT('%',#{lastName},'%')
+            </if>
+            <if test="email !=null and email!='' ">
+                AND email LIKE CONCAT('%',#{email},'%')
+            </if>
+            <if test="address !=null and address!='' ">
+                AND address LIKE CONCAT('%',#{address},'%')
+            </if>
+            <if test="phone !=null and phone!='' ">
+                AND phone LIKE CONCAT('%',#{phone},'%')
+            </if>
+            <if test="city !=null and city!='' ">
+                AND city LIKE CONCAT('%',#{city},'%')
+            </if>
+            <if test="country !=null and country!='' ">
+                AND country LIKE CONCAT('%',#{country},'%')
+            </if>
+        </where>
+    </select>
+
+
+    <select id="selectStaffByPage"
+            parameterType="com.example.vo.staff.StaffVO"
+            resultMap="BaseResultMapStaffVO">
+        SELECT
+        staff.staff_id,
+        staff.first_name,
+        staff.last_name,
+        staff.email,
+        staff.active,
+        staff.last_update,
+        staff.picture,
+        address.address_id,
+        address.address,
+        address.district,
+        address.phone,
+        address.postal_code,
+        city.city_id,
+        city.city,
+        country.country_id,
+        country.country
+        FROM
+        staff
+        LEFT JOIN address ON staff.address_id = address.address_id
+        LEFT JOIN city ON address.city_id = city.city_id
+        LEFT JOIN country ON city.country_id = country.country_id
+        <where>
+            <if test="firstName !=null and firstName!='' ">
+                AND first_name LIKE CONCAT('%',#{firstName},'%')
+            </if>
+            <if test="lastName !=null and lastName!='' ">
+                AND last_name LIKE CONCAT('%',#{lastName},'%')
+            </if>
+            <if test="email !=null and email!='' ">
+                AND email LIKE CONCAT('%',#{email},'%')
+            </if>
+            <if test="address !=null and address!='' ">
+                AND address LIKE CONCAT('%',#{address},'%')
+            </if>
+            <if test="phone !=null and phone!='' ">
+                AND phone LIKE CONCAT('%',#{phone},'%')
+            </if>
+            <if test="city !=null and city!='' ">
+                AND city LIKE CONCAT('%',#{city},'%')
+            </if>
+            <if test="country !=null and country!='' ">
+                AND country LIKE CONCAT('%',#{country},'%')
+            </if>
+        </where>
+
+    </select>
+</mapper>
