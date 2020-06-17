@@ -166,7 +166,7 @@ public class FilmTest {
             // 遍历打印
             // highlightFields.keySet().forEach(key -> System.out.println("map.get(" + key + ") = " + highlightFields.get(key)));
             // 替换字段
-            highlightFields.keySet().forEach(key -> filmList.setDescription(String.valueOf(highlightFields.get(key))));
+            highlightFields.keySet().forEach(key -> filmList.setDescription(String.valueOf(highlightFields.get(key).get(0))));
             filmListList.add(filmList);
         }
         for (FilmList filmList : filmListList) {

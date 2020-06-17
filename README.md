@@ -162,3 +162,53 @@ mapper:
     }
 
 ```
+
+>Response body
+```json
+[
+    {
+        "id":"hQosvHIBehbceu-UnoX1",
+        "fid":538,
+        "title":"LOVERBOY ATTACKS",
+        "category":"New",
+        "price":0.99,
+        "length":162,
+        "rating":"PG-13",
+        "description":"A Boring Story of a Car And a Butler who must Build a <span style="color:#F56C6C">Girl</span> in Soviet Georgia",
+        "actors":"Lucille Tracy, Kevin Bloom, Parker Goldberg, Cary Mcconaughey, Morgan Mcdormand, Adam Hopper, Groucho Williams, Renee Ball, Thora Temple"
+    },
+    {
+        "id":"-AosvHIBehbceu-UnoX1",
+        "fid":653,
+        "title":"PANIC CLUB",
+        "category":"Horror",
+        "price":4.99,
+        "length":102,
+        "rating":"G",
+        "description":"A Fanciful Display of a Teacher And a Crocodile who must Succumb a <span style="color:#F56C6C">Girl</span> in A Baloon",
+        "actors":"Cameron Streep, Dan Streep, Harvey Hope"
+    },
+    {
+        "id":"ggosvHIBehbceu-Unob2",
+        "fid":791,
+        "title":"SHOW LORD",
+        "category":"Documentary",
+        "price":4.99,
+        "length":167,
+        "rating":"PG-13",
+        "description":"A Fanciful Saga of a Student And a <span style="color:#F56C6C">Girl</span> who must Find a Butler in Ancient Japan",
+        "actors":"Kenneth Paltrow, Kevin Garland"
+    },
+    {
+        "id":"ywosvHIBehbceu-UnoPz",
+        "fid":94,
+        "title":"BRAVEHEART HUMAN",
+        "category":"Family",
+        "price":2.99,
+        "length":176,
+        "rating":"PG-13",
+        "description":"A Insightful Story of a Dog And a Pastry Chef who must Battle a <span style="color:#F56C6C">Girl</span> in Berlin",
+        "actors":"Nick Stallone, Kirsten Akroyd, Jane Jackman, Jayne Nolte"
+    }
+]
+```

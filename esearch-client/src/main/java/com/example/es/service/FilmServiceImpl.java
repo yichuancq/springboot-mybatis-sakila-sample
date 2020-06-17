@@ -64,6 +64,7 @@ public class FilmServiceImpl implements FilmService {
         //String queryWord = "Girl";
         // 查询的字段
         String field = "description";
+
         // 高亮设置
         String preTags = "<span style=\"color:#F56C6C\">";
         String postTags = "</span>";
@@ -72,8 +73,7 @@ public class FilmServiceImpl implements FilmService {
         NativeSearchQuery searchQuery =
                 new NativeSearchQueryBuilder()
                         .withQuery(QueryBuilders.matchQuery(field, queryWord))
-                        .withHighlightBuilder(new HighlightBuilder().field(field)
-                                .preTags(preTags).postTags(postTags))
+                        .withHighlightBuilder(new HighlightBuilder().field(field).preTags(preTags).postTags(postTags))
                         .withPageable(PageRequest.of(page, pageSize))
                         .build();
         Flux<SearchHit<FilmList>> searchHitFlux = elasticsearchOperations.search(searchQuery, FilmList.class, index);
@@ -82,8 +82,9 @@ public class FilmServiceImpl implements FilmService {
         while (filmListIterator.hasNext()) {
             SearchHit<FilmList> searchHit = filmListIterator.next();
             FilmList filmList = searchHit.getContent();
+
             Map<String, List<String>> highlightFields = searchHit.getHighlightFields();
-            highlightFields.keySet().forEach(key -> filmList.setDescription(String.valueOf(highlightFields.get(key))));
+            highlightFields.keySet().forEach(key -> filmList.setDescription(String.valueOf(highlightFields.get(key).get(0))));
             filmListList.add(filmList);
             log.info("filmList:{}", filmList);
         }
