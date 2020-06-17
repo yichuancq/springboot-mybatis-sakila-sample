@@ -3,12 +3,12 @@ import com.example.es.domain.FilmList;
 import com.example.es.service.FilmService;
 import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
 import org.springframework.data.elasticsearch.core.ReactiveElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.SearchHit;
@@ -17,10 +17,7 @@ import org.springframework.data.elasticsearch.core.query.*;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import reactor.core.publisher.Flux;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 import static org.elasticsearch.index.query.QueryBuilders.matchAllQuery;
 
@@ -36,8 +33,7 @@ public class FilmTest {
 
     @Autowired
     private ReactiveElasticsearchOperations elasticsearchOperations;
-    @Autowired
-    private ElasticsearchOperations elasticsearchOperations2;
+
     @Autowired
     private FilmService filmService;
 
@@ -133,5 +129,50 @@ public class FilmTest {
             log.info("filmList:{}", filmList);
         }
     }
+
+
+    /**
+     * NativeSearchQuery 高亮查询
+     */
+    @Test
+    public void queryHighLightSearchQuery() {
+        List<FilmList> filmListList = new ArrayList<>();
+        // 查询的关键字
+        String queryWord = "Girl";
+        // 查询的字段
+        String field = "description";
+        // page
+        Integer page = 1;
+        // pageSize
+        Integer pageSize = 50;
+        // 高亮设置
+        String preTags = "<span style=\"color:#F56C6C\">";
+        String postTags = "</span>";
+        IndexCoordinates index = IndexCoordinates.of(stringIndex);
+        //创建builder
+        NativeSearchQuery searchQuery =
+                new NativeSearchQueryBuilder()
+                        .withQuery(QueryBuilders.matchQuery(field, queryWord))
+                        .withHighlightBuilder(new HighlightBuilder().field(field).preTags(preTags).postTags(postTags))
+                        .withPageable(PageRequest.of(page, pageSize))
+                        .build();
+        Flux<SearchHit<FilmList>> searchHitFlux = elasticsearchOperations.search(searchQuery, FilmList.class, index);
+
+        Iterator<SearchHit<FilmList>> filmListIterator = searchHitFlux.toIterable().iterator();
+        while (filmListIterator.hasNext()) {
+            SearchHit<FilmList> searchHit = filmListIterator.next();
+            FilmList filmList = searchHit.getContent();
+            Map<String, List<String>> highlightFields = searchHit.getHighlightFields();
+            // 遍历打印
+            // highlightFields.keySet().forEach(key -> System.out.println("map.get(" + key + ") = " + highlightFields.get(key)));
+            // 替换字段
+            highlightFields.keySet().forEach(key -> filmList.setDescription(String.valueOf(highlightFields.get(key))));
+            filmListList.add(filmList);
+        }
+        for (FilmList filmList : filmListList) {
+            log.info("filmList:{}", filmList);
+        }
+    }
+
 
 }

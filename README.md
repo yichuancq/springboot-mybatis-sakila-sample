@@ -101,7 +101,7 @@ mapper:
 > ES查询description字段包含关键字的数据
 ```java
 
-  /**
+    /**
      * 查询description字段包含关键字的数据
      */
     @Test
@@ -114,4 +114,51 @@ mapper:
             System.out.println(filmList.toString());
         }
     }
+```
+
+> ES 高亮&分页查询
+```java
+     /**
+     * NativeSearchQuery
+     */
+    @Test
+    public void queryHighLightSearchQuery() {
+        List<FilmList> filmListList = new ArrayList<>();
+        // 查询的关键字
+        String queryWord = "Girl";
+        // 查询的字段
+        String field = "description";
+        // page
+        Integer page = 1;
+        // pageSize
+        Integer pageSize = 50;
+        // 高亮设置
+        String preTags = "<span style=\"color:#F56C6C\">";
+        String postTags = "</span>";
+        IndexCoordinates index = IndexCoordinates.of(stringIndex);
+        //创建builder
+        NativeSearchQuery searchQuery =
+                new NativeSearchQueryBuilder()
+                        .withQuery(QueryBuilders.matchQuery(field, queryWord))
+                        .withHighlightBuilder(new HighlightBuilder().field(field).preTags(preTags).postTags(postTags))
+                        .withPageable(PageRequest.of(page, pageSize))
+                        .build();
+        Flux<SearchHit<FilmList>> searchHitFlux = elasticsearchOperations.search(searchQuery, FilmList.class, index);
+
+        Iterator<SearchHit<FilmList>> filmListIterator = searchHitFlux.toIterable().iterator();
+        while (filmListIterator.hasNext()) {
+            SearchHit<FilmList> searchHit = filmListIterator.next();
+            FilmList filmList = searchHit.getContent();
+            Map<String, List<String>> highlightFields = searchHit.getHighlightFields();
+            // 遍历打印
+            // highlightFields.keySet().forEach(key -> System.out.println("map.get(" + key + ") = " + highlightFields.get(key)));
+            // 替换字段
+            highlightFields.keySet().forEach(key -> filmList.setDescription(String.valueOf(highlightFields.get(key))));
+            filmListList.add(filmList);
+        }
+        for (FilmList filmList : filmListList) {
+            log.info("filmList:{}", filmList);
+        }
+    }
+
 ```

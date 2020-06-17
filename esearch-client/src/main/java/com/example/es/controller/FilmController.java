@@ -16,10 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class FilmController {
 
-//
-//    @Autowired
-//    private FilmApplication filmApplication;
-
     /**
      * 查询影片
      *
@@ -33,17 +29,4 @@ public class FilmController {
         return ResponseEntity.ok(null);
     }
 
-    /**
-     * 搜索文章
-     *
-     * @return
-     */
-//    @GetMapping("/film/search")
-//    public ResponseEntity searchFilms(
-//            @RequestParam(value = "curPage", defaultValue = "1") int curPage,
-//            @RequestParam(value = "size", defaultValue = "7") int size,
-//            @RequestParam(value = "keyword") String keyword) {
-//        List<FilmList> articles = filmApplication.searchMulWithHighLight(keyword, curPage, size);
-//        return ResponseEntity.ok(articles);
-//    }
 }
