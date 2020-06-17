@@ -11,17 +11,15 @@ import java.util.List;
  * @author yichuan
  */
 @Repository
-public interface FileListRepository extends ElasticsearchRepository<FilmList,String> {
+public interface FilmListRepository extends ElasticsearchRepository<FilmList, String> {
 
     /**
-     *
      * @param actory
      * @return
      */
     List<FilmList> findFilmListsByActors(String actory);
 
     /**
-     *
      * @param desc
      * @return
      */

@@ -1,0 +1,11 @@
+# 配置端口
+server:
+  port: 8081
+
+# es data config
+spring:
+  data:
+    elasticsearch:
+      ip: localhost:9300  #指定连接ip地址和端口号
+      repositories:
+        enabled: true

@@ -2,19 +2,18 @@ import com.example.es.ESearchApplication;
 import com.example.es.domain.FilmList;
 import com.example.es.service.FilmService;
 import lombok.extern.slf4j.Slf4j;
+import org.elasticsearch.index.query.QueryBuilders;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
 import org.springframework.data.elasticsearch.core.ReactiveElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.SearchHit;
 import org.springframework.data.elasticsearch.core.mapping.IndexCoordinates;
-import org.springframework.data.elasticsearch.core.query.Criteria;
-import org.springframework.data.elasticsearch.core.query.CriteriaQuery;
-import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
-import org.springframework.data.elasticsearch.core.query.Query;
+import org.springframework.data.elasticsearch.core.query.*;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import reactor.core.publisher.Flux;
 
@@ -37,7 +36,8 @@ public class FilmTest {
 
     @Autowired
     private ReactiveElasticsearchOperations elasticsearchOperations;
-
+    @Autowired
+    private ElasticsearchOperations elasticsearchOperations2;
     @Autowired
     private FilmService filmService;
 
@@ -112,4 +112,26 @@ public class FilmTest {
             System.out.println(filmList.toString());
         }
     }
+
+
+    /**
+     * nativeSearchQuery
+     */
+    @Test
+    public void queryNativeSearchQuery() {
+        //创建builder
+        String queryWord = "Girl";
+        IndexCoordinates index = IndexCoordinates.of(stringIndex);
+        NativeSearchQuery searchQuery =
+                new NativeSearchQueryBuilder().withQuery(QueryBuilders.matchQuery("description",
+                        queryWord)).build();
+        Flux<SearchHit<FilmList>> searchHitFlux = elasticsearchOperations.search(searchQuery, FilmList.class, index);
+        Iterator<SearchHit<FilmList>> filmListIterator = searchHitFlux.toIterable().iterator();
+        while (filmListIterator.hasNext()) {
+            SearchHit<FilmList> searchHit = filmListIterator.next();
+            FilmList filmList = searchHit.getContent();
+            log.info("filmList:{}", filmList);
+        }
+    }
+
 }
