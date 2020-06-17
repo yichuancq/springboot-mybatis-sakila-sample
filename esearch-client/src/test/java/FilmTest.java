@@ -1,5 +1,6 @@
 import com.example.es.ESearchApplication;
 import com.example.es.domain.FilmList;
+import com.example.es.service.FilmService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,10 +17,10 @@ import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilde
 import org.springframework.data.elasticsearch.core.query.Query;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
 import static org.elasticsearch.index.query.QueryBuilders.matchAllQuery;
@@ -36,6 +37,10 @@ public class FilmTest {
 
     @Autowired
     private ReactiveElasticsearchOperations elasticsearchOperations;
+
+    @Autowired
+    private FilmService filmService;
+
 
     /**
      * 通过ID查询数据
@@ -86,7 +91,25 @@ public class FilmTest {
         String queryWord = "Girl";
         CriteriaQuery query = new CriteriaQuery(new Criteria("description").contains(queryWord));
         Flux<SearchHit<FilmList>> searchHitFlux = elasticsearchOperations.search(query, FilmList.class);
-        Mono<List<SearchHit<FilmList>>> filmListSearchHit = searchHitFlux.collectList();
-        Flux.fromIterable(() -> filmListSearchHit.flux().toIterable().iterator()).subscribe(System.out::println);
+        Iterator<SearchHit<FilmList>> filmListIterator = searchHitFlux.toIterable().iterator();
+        while (filmListIterator.hasNext()) {
+            SearchHit<FilmList> searchHit = filmListIterator.next();
+            FilmList filmList = searchHit.getContent();
+            log.info("filmList:{}", filmList);
+        }
+    }
+
+    /**
+     * 查询description字段包含关键字的数据
+     */
+    @Test
+    public void testQueryFilmListFlux() {
+        String queryWord = "Girl";
+        Flux<FilmList> filmListFlux = filmService.findAllByDescriptionLike(queryWord);
+        Iterator<FilmList> filmListIterator = filmListFlux.toIterable().iterator();
+        while (filmListIterator.hasNext()) {
+            FilmList filmList = filmListIterator.next();
+            System.out.println(filmList.toString());
+        }
     }
 }

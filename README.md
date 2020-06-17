@@ -1,7 +1,7 @@
 # springboot-mybatis-sakila-sample
 springboot-mybatis-sakila-sample
  
- 条件查询
+>条件查询
  ```java
   /**
      * 条件查询
@@ -10,7 +10,7 @@ springboot-mybatis-sakila-sample
      */
     List<FilmList> selectByCondition(FilmList filmList);
 ```
- mapper xml动态条件查询
+>mapper xml动态条件查询
 ```xml
  <!--动态条件查询-->
     <select id="selectByCondition"
@@ -36,9 +36,8 @@ springboot-mybatis-sakila-sample
             </if>
         </where>
     </select>
-```
-  
-  yaml config
+``` 
+>yaml config
 ```yaml
 # 配置端口
 server:
@@ -76,4 +75,43 @@ mapper:
   identity: mysql
 
 
+```
+
+
+
+####  es 查询
+
+> ES查询description字段包含关键字的数据
+```java
+ @Test
+    public void textSearch() {
+        String queryWord = "Girl";
+        CriteriaQuery query = new CriteriaQuery(new Criteria("description").contains(queryWord));
+        Flux<SearchHit<FilmList>> searchHitFlux = elasticsearchOperations.search(query, FilmList.class);
+        Iterator<SearchHit<FilmList>> filmListIterator = searchHitFlux.toIterable().iterator();
+        while (filmListIterator.hasNext()) {
+            SearchHit<FilmList> searchHit = filmListIterator.next();
+            FilmList filmList = searchHit.getContent();
+            log.info("filmList:{}", filmList);
+        }
+    }
+
+```
+
+> ES查询description字段包含关键字的数据
+```java
+
+  /**
+     * 查询description字段包含关键字的数据
+     */
+    @Test
+    public void testQueryFilmListFlux() {
+        String queryWord = "Girl";
+        Flux<FilmList> filmListFlux = filmService.findAllByDescriptionLike(queryWord);
+        Iterator<FilmList> filmListIterator = filmListFlux.toIterable().iterator();
+        while (filmListIterator.hasNext()) {
+            FilmList filmList = filmListIterator.next();
+            System.out.println(filmList.toString());
+        }
+    }
 ```

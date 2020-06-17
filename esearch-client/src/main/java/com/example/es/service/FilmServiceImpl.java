@@ -1,10 +1,19 @@
 package com.example.es.service;
 
+import com.example.es.domain.FilmList;
+import com.example.es.repository.FilmRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
 
 @Service
-public class FilmServiceImpl implements FilmService{
+public class FilmServiceImpl implements FilmService {
+
+
+    @Autowired
+    private FilmRepository filmRepository;
+
 
     @Override
     public SearchHits queryPageFilmList() {
@@ -37,6 +46,11 @@ public class FilmServiceImpl implements FilmService{
 //        SearchHits searchHits = elasticsearchRestTemplate.search(query,FilmList.class);
 //
 //        return searchHits;
-        return  null;
+        return null;
+    }
+
+    @Override
+    public Flux<FilmList> findAllByDescriptionLike(String keyword) {
+        return filmRepository.findAllByDescriptionLike(keyword);
     }
 }
