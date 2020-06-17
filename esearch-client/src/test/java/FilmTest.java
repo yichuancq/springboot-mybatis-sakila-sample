@@ -2,6 +2,7 @@ import com.example.es.ESearchApplication;
 import com.example.es.domain.FilmList;
 import com.example.es.service.FilmService;
 import lombok.extern.slf4j.Slf4j;
+import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
 import org.junit.Test;
@@ -36,7 +37,6 @@ public class FilmTest {
 
     @Autowired
     private FilmService filmService;
-
 
     /**
      * 通过ID查询数据
@@ -146,8 +146,8 @@ public class FilmTest {
         // pageSize
         Integer pageSize = 50;
         // 高亮设置
-        String preTags = "<span style=\"color:#F56C6C\">";
-        String postTags = "</span>";
+        String preTags = "<mark>";
+        String postTags = "</mark>";
         IndexCoordinates index = IndexCoordinates.of(stringIndex);
         //创建builder
         NativeSearchQuery searchQuery =
@@ -174,5 +174,49 @@ public class FilmTest {
         }
     }
 
+    /**
+     * 多字段匹配关键字
+     */
+    @Test
+    public void testMatchPhrasePrefixQuery() {
+        String queryText = "STA";
+        // 高亮设置
+        String preTags = "<mark>";
+        String postTags = "</mark>";
+        // page
+        List<FilmList> filmListList = new ArrayList<>();
+        IndexCoordinates index = IndexCoordinates.of(stringIndex);
+        String descriptionField = "description";
+        String titleField = "title";
+        BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
+        boolQueryBuilder.should(QueryBuilders.matchPhrasePrefixQuery(descriptionField, queryText));
+        boolQueryBuilder.should(QueryBuilders.matchPhrasePrefixQuery(titleField, queryText));
+        NativeSearchQuery searchQuery = new NativeSearchQueryBuilder()
+                .withQuery(boolQueryBuilder)
+                .withHighlightBuilder(new HighlightBuilder()
+                        .field(titleField)
+                        .field(descriptionField).preTags(preTags).postTags(postTags)).build();
+        Flux<SearchHit<FilmList>> searchHitFlux = elasticsearchOperations.search(searchQuery, FilmList.class, index);
+        Iterator<SearchHit<FilmList>> filmListIterator = searchHitFlux.toIterable().iterator();
+        while (filmListIterator.hasNext()) {
+            SearchHit<FilmList> searchHit = filmListIterator.next();
+            FilmList filmList = searchHit.getContent();
+            Map<String, List<String>> highlightFields = searchHit.getHighlightFields();
 
+            for (Map.Entry<String, List<String>> entry : highlightFields.entrySet()) {
+                String mapKey = entry.getKey();
+                List<String> mapValue = entry.getValue();
+                //title:<mark>NEWSIES</mark> STORY
+                if (mapKey.equals(titleField)) {
+                    filmList.setTitle(mapValue.get(0));
+                } else if (mapKey.equals(descriptionField)) {
+                    filmList.setDescription(mapValue.get(0));
+                }
+            }
+            filmListList.add(filmList);
+        }
+        for (FilmList filmList : filmListList) {
+            log.info("filmList:{}", filmList);
+        }
+    }
 }
