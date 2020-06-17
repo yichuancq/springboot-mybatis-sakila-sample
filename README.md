@@ -170,3 +170,20 @@ springboot-mybatis-sakila-sample
     }
 ]
 ```
+
+>Building
+```text
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Summary for springboot-mybatis-sakila-sample 1.0-SNAPSHOT:
+[INFO] 
+[INFO] springboot-mybatis-sakila-sample ................... SUCCESS [  0.230 s]
+[INFO] core ............................................... SUCCESS [  4.527 s]
+[INFO] esearch-client ..................................... SUCCESS [  1.695 s]
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  6.773 s
+[INFO] Finished at: 2020-06-18T04:34:31+08:00
+[INFO] ------------------------------------------------------------------------
+Finished: SUCCESS
+```
