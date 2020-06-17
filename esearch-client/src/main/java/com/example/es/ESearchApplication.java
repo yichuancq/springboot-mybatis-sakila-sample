@@ -12,11 +12,8 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableSwagger2
 @SpringBootApplication
 public class ESearchApplication {
-
     public static void main(String[] args) {
         SpringApplication.run(ESearchApplication.class, args);
     }
-
-
 
 }

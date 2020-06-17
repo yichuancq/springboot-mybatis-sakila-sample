@@ -1,17 +1,12 @@
 package com.example.es.service;
 
-import com.example.es.domain.FilmList;
+import org.springframework.data.elasticsearch.core.SearchHits;
 
-import java.util.List;
-
+/**
+ * @author yichuan
+ */
 public interface FilmService {
 
-
-    /**
-     * @param filmList
-     * @return
-     */
-    List<FilmList> selectByPage(FilmList filmList);
-
+    SearchHits  queryPageFilmList();
 
 }

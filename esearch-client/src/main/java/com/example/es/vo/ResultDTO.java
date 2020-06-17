@@ -30,7 +30,20 @@ public class ResultDTO<T> implements Serializable {
         this.data = data;
     }
 
-
+    /**
+     *
+     * @param code
+     * @param msg
+     * @param data
+     * @return
+     */
+    public  ResultDTO of(int code, String msg, T data) {
+        this.code = code;
+        this.msg = msg;
+        this.totalPage = totalPage;
+        this.data = data;
+        return  this;
+    }
     public ResultDTO(int code, String msg, int totalPage, T data) {
         this.code = code;
         this.msg = msg;
