@@ -14,10 +14,10 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableSwagger2
 @SpringBootApplication
 @MapperScan("com.example.dao")
-public class MyApplication {
+public class SakilaApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(MyApplication.class, args);
+        SpringApplication.run(SakilaApplication.class, args);
     }
 
 

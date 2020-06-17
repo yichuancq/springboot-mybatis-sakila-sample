@@ -1,4 +1,4 @@
-import com.example.MyApplication;
+import com.example.SakilaApplication;
 import com.example.domain.Staff;
 import com.example.service.staff.StaffService;
 import org.junit.Test;
@@ -12,7 +12,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.util.Date;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringBootTest(classes = MyApplication.class)
+@SpringBootTest(classes = SakilaApplication.class)
 public class StaffTest {
     private Logger logger = LoggerFactory.getLogger(getClass());
     @Autowired

@@ -1,4 +1,4 @@
-import com.example.MyApplication;
+import com.example.SakilaApplication;
 import com.example.dao.CityMapper;
 import com.example.domain.City;
 import com.example.domain.Country;
@@ -18,7 +18,7 @@ import java.util.Date;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringBootTest(classes = MyApplication.class)
+@SpringBootTest(classes = SakilaApplication.class)
 public class CityAddressTest {
     private Logger logger = LoggerFactory.getLogger(getClass());
     @Autowired

@@ -1,4 +1,4 @@
-import com.example.MyApplication;
+import com.example.SakilaApplication;
 import com.example.dao.ActorInfoMapper;
 import com.example.domain.ActorInfo;
 import org.junit.Test;
@@ -12,7 +12,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.util.List;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringBootTest(classes = MyApplication.class)
+@SpringBootTest(classes = SakilaApplication.class)
 public class ActorInfoTest {
     private Logger logger = LoggerFactory.getLogger(getClass());
 

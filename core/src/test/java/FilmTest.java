@@ -1,4 +1,5 @@
-import com.example.MyApplication;
+
+import com.example.SakilaApplication;
 import com.example.dao.FilmListMapper;
 import com.example.domain.FilmList;
 import org.junit.Test;
@@ -10,7 +11,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.util.List;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringBootTest(classes = MyApplication.class)
+@SpringBootTest(classes = SakilaApplication.class)
 public class FilmTest {
 
     @Autowired

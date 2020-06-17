@@ -7,10 +7,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
+import org.springframework.data.elasticsearch.core.ReactiveElasticsearchOperations;
+import org.springframework.data.elasticsearch.core.SearchHit;
 import org.springframework.data.elasticsearch.core.mapping.IndexCoordinates;
+import org.springframework.data.elasticsearch.core.query.Criteria;
+import org.springframework.data.elasticsearch.core.query.CriteriaQuery;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.data.elasticsearch.core.query.Query;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -27,6 +33,9 @@ public class FilmTest {
 
     @Autowired
     private ElasticsearchRestTemplate elasticsearchRestTemplate;
+
+    @Autowired
+    private ReactiveElasticsearchOperations elasticsearchOperations;
 
     /**
      * 通过ID查询数据
@@ -69,5 +78,15 @@ public class FilmTest {
         log.info("hasFlag:{}", hasFlag);
     }
 
-
+    /**
+     *
+     */
+    @Test
+    public void textSearch() {
+        String queryWord = "Girl";
+        CriteriaQuery query = new CriteriaQuery(new Criteria("description").contains(queryWord));
+        Flux<SearchHit<FilmList>> searchHitFlux = elasticsearchOperations.search(query, FilmList.class);
+        Mono<List<SearchHit<FilmList>>> filmListSearchHit = searchHitFlux.collectList();
+        Flux.fromIterable(() -> filmListSearchHit.flux().toIterable().iterator()).subscribe(System.out::println);
+    }
 }

@@ -1,4 +1,5 @@
 package com.example.es.domain;
+
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -16,13 +17,12 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 @ToString
-@Document(indexName = "nicer_but_slower_film_list")
+@Document(indexName = "nicer_but_slower_film_list", type = "gzdc")
 public class FilmList implements Serializable {
-
     @Id
     private String id;
 
-    @Field(type = FieldType.Short,name = "FID")
+    @Field(type = FieldType.Short, name = "FID")
     private Short fid;
 
     @Field(type = FieldType.Text)
