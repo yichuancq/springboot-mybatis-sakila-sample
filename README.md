@@ -10,9 +10,9 @@ springboot-mybatis-sakila-sample
      */
     List<FilmList> selectByCondition(FilmList filmList);
 ```
->mapper xml动态条件查询
+>mybatis mapper xml动态条件查询
 ```xml
- <!--动态条件查询-->
+    <!--动态条件查询-->
     <select id="selectByCondition"
             parameterType="com.example.domain.FilmList"
             resultType="com.example.domain.FilmList">
@@ -37,48 +37,6 @@ springboot-mybatis-sakila-sample
         </where>
     </select>
 ``` 
->yaml config
-```yaml
-# 配置端口
-server:
-  port: 8080
-spring:
-  # 配置数据源
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/sakila?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&useSSL=false&zeroDateTimeBehavior=convertToNull&serverTimezone=UTC
-    username: root
-    password: 123456
-    type: com.alibaba.druid.pool.DruidDataSource
-# mybatis-plus相关配置
-# pagehelper
-pagehelper:
-  helperDialect: mysql
-  reasonable: true
-  supportMethodsArguments: true
-  params: count=countSql
-
-
-mybatis:
-  typeAliasesPackage: com.example.domain
-  mapper-locations: classpath:mybatis/mapper/*.xml
-  configuration:
-    # 缓存开启
-    cache-enabled: true
-    # 懒加载开启
-    lazy-loading-enabled: true
-    # SQL打印日志所使用的日志类 - 关键
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
-
-mapper:
-  mappers: com.example.dao
-  identity: mysql
-
-
-```
-
-
-
 ####  es 查询
 
 > ES查询description字段包含关键字的数据
@@ -163,8 +121,8 @@ mapper:
 
 ```
 
->Response body
-```json
+>controller请求返回的response body
+```text
 [
     {
         "id":"hQosvHIBehbceu-UnoX1",
